@@ -1,0 +1,90 @@
+<div class="modal-content">
+    <div class="modal-header text-white" style="background: #0984e3">
+        <h5 class="modal-title" id="exampleModalLabel">
+        {{@$page_title}}
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true" class="text-white">
+            ×
+        </span>
+        </button>
+    </div>
+    <form action="{{$action}}" method="post" data-action="make_ajax" data-action-after="reload">
+        @csrf
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Item</label>
+                        <select class="form-control" name="item">
+                            @foreach ($items as $item)
+                            <option value="{{$item->id}}" {{$row->item == $item->id ? 'selected':''}}>{{$item->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Brand</label>
+                        <select class="form-control" name="brand">
+                            @foreach ($brands as $brand)
+                            <option value="{{$brand->id}}" {{$row->brand == $brand->id ? 'selected':''}}>{{$brand->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Storage Area</label>
+                        <select class="form-control" name="storage_area">
+                            @foreach ($storage as $s)
+                            <option value="{{$s->id}}" {{$row->storage_area == $s->id ? 'selected':''}}>{{$s->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Title</label>
+                        <input type='title' name="title" id="label" class="form-control" required="" value="{{$row->title}}"/>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Quantity</label>
+                        <input type='text' name="qty" id="label" class="form-control" required="" value="{{$row->qty}}"/>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Per Price</label>
+                        <input type='text' name="per_price" id="label" class="form-control" required="" value="{{$row->per_price}}"/>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Date</label>
+                        <input type='date' name="date" id="label" class="form-control" required="" value="{{$row->date}}"/>
+                    </div>
+                </div> 
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Battery</label>
+                        <input type='text' name="battery" id="label" class="form-control" required="" value="{{$row->battery}}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-danger m-btn m-btn--icon" id="add_oh_period"><span><i class="la la-check"></i><span>Update</span></span></button>
+            <button type="button" class="btn btn-secondary m-btn m-btn--icon" data-dismiss="modal"><span>Close</span></button>
+        </div>
+    </form>
+</div> 

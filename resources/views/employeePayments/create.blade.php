@@ -1,0 +1,68 @@
+<div class="modal-content">
+    <div class="modal-header text-white" style="background:#0984e3">
+        <h5 class="modal-title" id="exampleModalLabel">
+        {{@$page_title}}
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true" class="text-white">
+            ×
+        </span>
+        </button>
+    </div>
+    <form action="{{$action}}" method="post" data-action="make_ajax" data-action-after="reload" >
+        @csrf
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Year</label>
+                        <input type='text' name="year" id="label" class="form-control" required="" />
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Select Emloye Role</label>
+                        <select class="form-control" name="month">
+                            @foreach (config('constants.months') as $key=>$value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Paid Date</label>
+                        <input type='date' name="date" id="label" class="form-control" required="" />
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="label" class="control-label">Paid Amount</label>
+                        <input type='text' name="amount" id="label" class="form-control" required="" />
+                    </div>
+                </div>
+                
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="description" class="control-label">Note</label>
+                        <textarea  name="note" id="description" class="form-control"></textarea>
+                    </div>
+                </div> 
+                
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type='hidden' name="employee_id" value="{{$employee->id}}" class="form-control" />
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-info" style="background:#0984e3">Add</button>
+            <button type="reset" class="btn btn-danger">Clear</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </form>
+</div> 
