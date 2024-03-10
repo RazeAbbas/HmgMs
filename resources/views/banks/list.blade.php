@@ -3,9 +3,8 @@
 <div class="col">
   <h3 class="text-center p-3">{{$page_title}}</h3>
   <div>
-    <a href="#data_modal" data-toggle="modal" data-url="{{url($module['action'].'/create')}}" data-action="data_modal" class="btn btn-danger btn-sm m-btn" style="margin-bottom: 20px; float: right;">+ Add Area</a>
+    <a href="{{url($module['action'].'/create')}}"  class="btn btn-danger btn-sm m-btn" style="margin-bottom: 20px; float: right;">+ Add Area</a>
   </div>
-  
   <div class="single-table">
     <div class="table-responsive">
       <table class="table">

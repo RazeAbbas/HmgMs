@@ -1,12 +1,14 @@
+@extends('layouts.app')
+@section('content')
 <div class="modal-content">
     <div class="modal-header text-white" style="background: #0984e3">
         <h5 class="modal-title" id="exampleModalLabel">
         {{@$page_title}}
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true" class="text-white">
+        <!-- <span aria-hidden="true" class="text-white">
             ×
-        </span>
+        </span> -->
         </button>
     </div>
     <form action="{{$action}}" method="post" data-action="make_ajax" data-action-after="reload" >
@@ -42,3 +44,4 @@
         </div>
     </form>
 </div> 
+@endsection

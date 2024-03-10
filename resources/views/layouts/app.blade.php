@@ -14,17 +14,13 @@
     <link rel="stylesheet" href="{{asset('assets/css/owl.carousel.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/slicknav.min.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
     <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
-    
     <link rel="stylesheet" href="{{asset('assets/css/typography.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/default-css.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/styles.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/responsive.css')}}">
-    
     <script src="{{asset('assets/js/vendor/modernizr-2.8.3.min.js')}}"></script>
     @yield('styles')
-    
 </head>
 
 <body class="body">
@@ -43,7 +39,6 @@
                             <a href="index.html"><img src="{{asset('assets/images/icon/logo2.png')}}" alt="logo"></a>
                         </div>
                     </div>
-                    
                     <div class="col-md-9 clearfix text-right">
                         <div class="d-md-inline-block d-block mr-md-4">
                             <ul class="notification-area">
@@ -223,6 +218,7 @@
 <script src="{{asset('assets/js/maps.js')}}"></script>
 <script src="{{asset('assets/js/plugins.js')}}"></script>
 <script src="{{asset('assets/js/scripts.js')}}"></script>
+
 <script type="text/javascript" src="{{env('GLOBAL_SCRIPT')}}"></script>
 <script type="text/javascript">
     baseJS.init(
@@ -230,7 +226,9 @@
         "site_url": "{{url('/')}}",
         "current_url":"{{URL::current()}}",
         "voice_input":true,
-        "lang":"en"
+        "lang":"en",
+        "notif": {"type":"toastr", "options":[]},
+         "inputMasking": "YES"
     }
     );
 </script>

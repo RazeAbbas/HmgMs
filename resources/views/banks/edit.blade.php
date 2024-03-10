@@ -1,3 +1,5 @@
+@extends('layouts.app')
+@section('content')
 <div class="modal-content">
     <div class="modal-header text-white" style="background: #0984e3">
         <h5 class="modal-title" id="exampleModalLabel">
@@ -41,3 +43,4 @@
         </div>
     </form>
 </div> 
+@endsection
