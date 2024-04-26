@@ -9,6 +9,7 @@ use App\Models\Miscellaneous;
 use App\Models\EmployeePayment;
 use App\Models\Order;
 use App\Models\Item;
+use App\Models\Package;
 use App\Models\Sale;
 
 class DashboardController extends Controller
@@ -39,7 +40,7 @@ class DashboardController extends Controller
             "order_sale"=> Order::where("office_id","=",Auth::user()->office)->sum("total_bill"),
             "pos_sale"=>Sale::where("office_id","=",Auth::user()->office)->sum("total"),
             "expenses"=>Expense::where("office_id","=",Auth::user()->office)->sum("amount") + Miscellaneous::where("office_id","=",Auth::user()->office)->sum("amount"),
-            "items"=>Item::where("office_id","=",Auth::user()->office)->count(),
+            "items"=>Package::where("office_id","=",Auth::user()->office)->count(),
             "emp_payments"=>EmployeePayment::where("office_id","=",Auth::user()->office)->sum("amount"),
         );
         return view('dashboard',compact('page_title','data'));

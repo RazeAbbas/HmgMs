@@ -9,6 +9,8 @@ use App\Models\Order;
 use App\Models\Miscellaneous;
 use App\Models\Expense;
 use App\Models\Employe;
+use App\Models\Sale;
+use App\Models\SaleDetail;
 use App\Models\EmployeePayment;
 use App\Models\Ledger;
 use App\Models\SubDealer;
@@ -16,6 +18,8 @@ use App\Models\Transaction;
 use App\Exports\LedgerExport;
 use Response;
 use PDF;
+use Carbon\Carbon;
+
 
 class ReportController extends Controller
 {
@@ -63,88 +67,44 @@ class ReportController extends Controller
                     "module"=>array('type'=>$this->type,'singular'=>$this->singular,'plural'=>$this->plural,'view'=>$this->view,'action'=>$this->action,'db_key'=>$this->db_key)
                 );
 
-        $data['bill_payment'] = Order::where("office_id","=",Auth::user()->office)->sum("advance_amount");
+        // $data['bill_payment'] = Order::where("office_id","=",Auth::user()->office)->sum("advance_amount");
+        $data['sales'] = Sale::where("office_id","=",Auth::user()->office)->sum("total");
         $data["expense"] = Expense::where("office_id","=",Auth::user()->office)->sum("amount");
         $data["miscellaneous"] = Miscellaneous::where("office_id","=",Auth::user()->office)->sum("amount");
         $data["supplier_payment"] = Ledger::where("office_id","=",Auth::user()->office)->sum("paid_amount");
         $data["employee_payment"] = EmployeePayment::where("office_id","=",Auth::user()->office)->sum("amount");
         $data["subdealer_payment"] = Transaction::where("office_id","=",Auth::user()->office)->sum("received_amount");
         
-        
-        /*
-        GET RECORDS
-        */
-        // $records   = Categories;
-        // $records   = $this->search($records,$request,$data)->orderBy('id','DESC');
-        // /*
-        // GET TOTAL RECORD BEFORE BEFORE PAGINATE
-        // */
-        // $data['count']      = $records->count();
-        // /*
-        // PAGINATE THE RECORDS
-        // */
-        // $records            = $records->paginate($this->perpage);
-        // $records->appends($request->all())->links();
-        // $links = $records->links();
-
-        // $records = $records->toArray();
-        // $records['pagination'] = $links;
-        // /*
-        // ASSIGN DATA FOR VIEW
-        // */
-        // $data['list']   =   $records;
-        //dd($data);
         return view($this->view.'summaryReports/list',$data);
     }
 
+    
     public function DailyReportList(Request $request)
-    {
-        $data   = array(
-                    "page_title"=>"Daily ".$this->plural,
-                    "page_heading"=>$this->plural,
-                    "breadcrumbs"=>array("#"=>$this->plural),
-                    "module"=>array('type'=>$this->type,'singular'=>$this->singular,'plural'=>$this->plural,'view'=>$this->view,'action'=>$this->action,'db_key'=>$this->db_key)
-                );
-                // return date('Y-m-d');
-        // $result = Ledger::whereMonth("ledger_date",date('m'))->get();
-        // dd($result->toArray());
-        // return $result;
-        // $data['bill_payment'] = Order::where("office_id","=",Auth::user()->office)->sum("advance_amount");
-        $data["supplier_payment"] = Ledger::with("getSupplier")->where("ledger_date","=",date("Y-m-d"))->where("office_id","=",Auth::user()->office)->get();
-        // dd($data["supplier_payment"]->toArray());
-        $data["expense"] = Expense::where("date","=",date("Y-m-d"))->where("office_id","=",Auth::user()->office)->get();
-        $data["miscellaneous"] = Miscellaneous::where("date","=",date("Y-m-d"))->where("office_id","=",Auth::user()->office)->get();
-        $data["employee_payment"] = EmployeePayment::with("getEmployee")->where("date","=",date("Y-m-d"))->where("office_id","=",Auth::user()->office)->get();
-        // $data["subdealer_payment"] = Transaction::where("office_id","=",Auth::user()->office)->sum("received_amount");
-        $data["subdealer_payment"] = Transaction::with("getSubDealer")->where("date","=",date("Y-m-d"))->where("office_id","=",Auth::user()->office)->get();
-        // dd($data["subdealer_payment"]->toArray());
-        
-        
-        /*
-        GET RECORDS
-        */
-        // $records   = Categories;
-        // $records   = $this->search($records,$request,$data)->orderBy('id','DESC');
-        // /*
-        // GET TOTAL RECORD BEFORE BEFORE PAGINATE
-        // */
-        // $data['count']      = $records->count();
-        // /*
-        // PAGINATE THE RECORDS
-        // */
-        // $records            = $records->paginate($this->perpage);
-        // $records->appends($request->all())->links();
-        // $links = $records->links();
+{
+    $today = Carbon::today()->toDateString();
 
-        // $records = $records->toArray();
-        // $records['pagination'] = $links;
-        // /*
-        // ASSIGN DATA FOR VIEW
-        // */
-        // $data['list']   =   $records;
-        //dd($data);
-        return view($this->view.'dailyReport/list',$data);
-    }
+    $data = [
+        "page_title" => "Daily " . $this->plural,
+        "page_heading" => $this->plural,
+        "breadcrumbs" => ["#" => $this->plural],
+        "module" => [
+            'type' => $this->type,
+            'singular' => $this->singular,
+            'plural' => $this->plural,
+            'view' => $this->view,
+            'action' => $this->action,
+            'db_key' => $this->db_key
+        ]
+    ];
+    $data['sale_wmp'] = SaleDetail::whereRaw('DATE(created_at) = ?', [$today])->where("office_id", "=", Auth::user()->office)->get();
+    $data["supplier_payment"] = Ledger::with("getSupplier")->whereDate("ledger_date", $today)->where("office_id", "=", Auth::user()->office)->get();
+    $data["expense"] = Expense::whereRaw('DATE(created_at) = ?', [$today])->where("office_id", "=", Auth::user()->office)->get();
+    $data["miscellaneous"] = Miscellaneous::whereRaw('DATE(created_at) = ?', [$today])->where("office_id", "=", Auth::user()->office)->get();
+    $data["employee_payment"] = EmployeePayment::with("getEmployee")->whereRaw('DATE(created_at) = ?', [$today])->where("office_id", "=", Auth::user()->office)->get();
+    $data["subdealer_payment"] = Transaction::with("getSubDealer")->whereRaw('DATE(created_at) = ?', [$today])->where("office_id", "=", Auth::user()->office)->get();
+
+    return view($this->view . 'dailyReport/list', $data);
+}
 
     public function monthlyReportList(Request $request)
     {
@@ -172,111 +132,7 @@ class ReportController extends Controller
                     $data["subdealer_payment"] = Transaction::with("getSubDealer")->whereMonth("date",date('m'))->where("office_id","=",Auth::user()->office)->get();
                     return view($this->view.'monthlyReport/list',$data);
                 }
-        
-        
-        /*
-        GET RECORDS
-        */
-        // $records   = Categories;
-        // $records   = $this->search($records,$request,$data)->orderBy('id','DESC');
-        // /*
-        // GET TOTAL RECORD BEFORE BEFORE PAGINATE
-        // */
-        // $data['count']      = $records->count();
-        // /*
-        // PAGINATE THE RECORDS
-        // */
-        // $records            = $records->paginate($this->perpage);
-        // $records->appends($request->all())->links();
-        // $links = $records->links();
-
-        // $records = $records->toArray();
-        // $records['pagination'] = $links;
-        // /*
-        // ASSIGN DATA FOR VIEW
-        // */
-        // $data['list']   =   $records;
-        //dd($data);
         return view($this->view.'monthlyReport/list',$data);
     }
-
-    // public function cleanData(&$data) {
-    //     $unset = ['ConfirmPassword','q','_token'];
-    //     foreach ($unset as $value) {
-    //         if(array_key_exists ($value,$data))  {
-    //             unset($data[$value]);
-    //         }
-    //     }
-    // }
-    // public function create(Request $request)
-    // {
-    //     if($request->input('label')){
-    //         $data = $request->all();
-    //         $this->cleanData($data);
-            
-    //         $is_save             = Categories::where('label','=',
-    //                                             $data['label'])
-    //                                             ->count();
-    //         if($is_save > 0)    {
-    //             $response = array('flag'=>false,'msg'=>$this->singular.' with label already exist.');
-    //             echo json_encode($response); return;
-    //         }
-    //         $Areas         = new Categories;
-    //         $Areas->insert($data);
-    //         $response = array('flag'=>true,'msg'=>$this->singular.' is added sucessfully.','action'=>'reload');
-    //         echo json_encode($response); return;
-    //     }
-
-    //     $data   = array(
-    //                 "page_title"=>"Add ".$this->singular,
-    //                 "page_heading"=>"Add ".$this->singular,
-    //                 "breadcrumbs"=>array("dashboard"=>"Dashboard","#"=>$this->plural." List"),
-    //                 "action"=> url($this->action.'/create')
-    //             );
-    //     return view($this->view.'create',$data);
-    // }
-    // public function update(Request $request,$id = NULL)
-    // {
-    //     if($request->method() == "POST"){
-    //         $data = $request->all();
-    //         $this->cleanData($data);
-
-    //         if(isset($data['label'])) {
-    //             $is_save             = Categories::where('label','=',
-    //                                                 $data['label'])
-    //                                                 ->where($this->db_key,'!=',
-    //                                                 $id)
-    //                                                 ->count();
-    //             if($is_save > 0)    {
-    //                 $response = array('flag'=>false,'msg'=>$this->singular.' with label already exist.');
-    //                 echo json_encode($response); return;
-    //             }
-    //         }
-    //         $obj         = Categories::find($id);
-    //         $obj->update($data);
-    //         $response = array('flag'=>true,'msg'=>$this->singular.' is updated sucessfully.','action'=>'reload');
-    //         echo json_encode($response); return;
-    //     }
-    //     $data   = array(
-    //                 "page_title"=>"Edit ".$this->singular,
-    //                 "page_heading"=>"Edit ".$this->singular,
-    //                 "breadcrumbs"=>array("dashboard"=>"Dashboard","#"=>$this->plural." List"),
-    //                 "action"=> url($this->action.'/edit/'.$id),
-    //                 "row" => Categories::find($id)
-    //             );
-    //     return view($this->view.'edit',$data);
-    // }
-    // public function delete($id) {
-    //     //Categories::destroy($id);
-    //     $response = array('flag'=>true,'msg'=>$this->singular.' has been deleted.');
-    //     echo json_encode($response); return;
-    // }
-    // public function _bulk(Request $request) {
-    //     $data = $request->all();
-    //     //Categories::destroy($id);
-    //     $response = array('flag'=>true,'msg'=>$this->singular.' has been deleted.','action'=>'reload');
-    //     echo json_encode($response); return;
-    // }
-
 }
 

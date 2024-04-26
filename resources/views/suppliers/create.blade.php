@@ -38,7 +38,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="label" class="control-label">Account No.</label>
-                        <input type='text' name="account" id="label" class="form-control" required=""/>
+                        <input type='text' name="account" id="label" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-6">

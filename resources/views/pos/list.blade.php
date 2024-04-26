@@ -11,8 +11,9 @@
     /**** The above is not part of the pen *****/
     
     .pos-container .item {
-        width:8em; height:8em; border-radius: 5px;margin:8px 8px;float:left;
-        background-color:#d63031;
+        width:8em; 
+        height:6em; border-radius: 5px;margin:8px 8px;float:left;
+        background-color:#abcc80;
         color: white
         /*  text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0; */
         box-shadow: 10px 10px 5px grey;
@@ -34,6 +35,9 @@
         align-items: center;
         margin: 0;
     }
+    .select.form-control:not([size]):not([multiple]) {
+        height: calc(3.25rem + 2px) !important; 
+    }
     .pos-container .navlist { bacground-color:#ddd; }
     .pos-container .tabbar { margin-top:3px; }
     
@@ -46,7 +50,7 @@
 @endsection
 @section('content')
 <div class="col-12 text-center">
-    <h4 class="p-3">{{$page_title}}</h4>
+    <h4 class=""><b>{{$page_title}}</b></h4><hr>
 </div>
 
 <div class="modal fade" id="modal" tabindex="-1" role="dialog">
@@ -89,47 +93,34 @@
 
 
 <div class="col-md-7">
-    <div class="container pos-container"> 
-        <div class="row">
-            <div class="col-md-8">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroup-sizing-default"><i class="fa fa-barcode" aria-hidden="true"></i></span>
-                    </div>
-                    <input type="text" class="form-control searchProduct" name="search_product" placeholder="Product with Name" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+<div class="container pos-container"> 
+    <div class="row">
+        <div class="col-md-8">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default"><i class="fa fa-barcode" aria-hidden="true"></i></span>
                 </div>
-                <div class="displayItems"></div>
-                <div class="tab-container">
-                    <ul class="list-unstyled">
-                        @foreach ($list['data'] as $key=>$value)
-                        <li class="item">
-                            <a href="#" onclick="getStockItem({{$value['id']}})" value="{{$value['per_price']}}"><div class="text-center p-3 text-white">{{$value['title']}}</div></a>
-                            {{-- <img src="http://lorempixel.com/96/96/food/" class="img-rounded img-responsive" alt="" > --}}
-                        </li>
-                        @endforeach
-                    </ul>
-                </div>
+                <input type="text" class="form-control searchProduct" name="search_product" placeholder="Product with Name" aria-label="Default" aria-describedby="inputGroup-sizing-default">
             </div>
-            {{-- <div class="col-md-4">
-                <div class="panel panel-primary panel-invoice">
-                    <div class="panel-heading">
-                        <div>Invoice [<span class="invoice-number">9999999999999999</span>]</div>
-                        <small class="invoice-date">Date 2017-09-27</small>
-                    </div>
-                    <div class="panel-body">Welcome to <span id="invoice-company-title">[EOG] cafe/bar</span>
-                        <ul class="list-unstyled calculator-roll" id="calculator-items">
-                            <li class="calculator-item row"><span class="item-title col-sm-8">Whatever</span><span class="item-amount col-sm-4 text-right">50.22</span></li>
-                            <li class="calculator-item row"><span class="item-title col-sm-8">Whatever</span><span class="item-amount col-sm-4 text-right">1050.00</span></li>
-                            <li class="calculator-item row"><span class="item-title col-sm-8">Whatever</span><span class="item-amount col-sm-4 text-right">1050.00</span></li>
-                        </ul>
-                    </div>
-                    <div class="panel-footer">
-                        <div id="invoice-total" class="row "><span class="col-sm-8 text-left">Total</span><span class="col-sm-4 text-right">999.99</span></div>
-                    </div>
-                </div>
-            </div> --}}
+            <div class="displayItems"></div>
+            <div class="tab-container pos-body">
+                <ul class="list-unstyled">
+                    @foreach ($list['data'] as $key => $value)
+                    @php
+                        $colors = ['#4c697a','#213A5C', '#13315c'];
+                        $colorIndex = $key % count($colors);
+                        $color = $colors[$colorIndex];
+                    @endphp
+                    <li class="item" style="background-color: {{$color}};">
+                        <a href="#" onclick="getStockItem({{$value['id']}})" value="{{$value['price']}}"><div class="text-center p-3 text-white">{{$value['title']}}</div></a>
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
     </div>
+</div>
+
 </div>
 <div class="col-md-5">
     <div class="card">
@@ -148,6 +139,15 @@
                     <input type="date" class="form-control" id="date" name="date" required>
                 </div>
                 <div>
+                <div class="form-group mb-5">
+                    <label for="stylist" class="form-label">Stylist</label>
+                    <select name="emp_id" id="emp_id" class="form-control">
+                        <option>Select Stylist</option>
+                        @foreach($employees as $val)
+                        <option value="{{$val->id}}">{{$val->first_name}}</option>
+                        @endforeach
+                    </select>
+                </div> 
                     
                     <div class="single-table">
                         <div class="table-responsive">
@@ -206,7 +206,7 @@
                     var rowCount = $(".addMoreRow tr").length;
                     var tr = "<tr><td>"+response.title+"</td>"+
                         "<td><input type='hidden' name='item[]' class='form-control item' value='"+response.id+"'><input type='number' name='qty[]' min='1' class='form-control qty' required></td>"+
-                        "<td><input type='text' name='price[]' class='form-control price' value='"+response.per_price+"'></td>"+
+                        "<td><input type='text' name='price[]' class='form-control price' value='"+response.price+"'></td>"+
                         "<td><input type='text' name='total[]' class='form-control total' value=''></td>"+
                         "<td><button' class='btn btn-danger delete'><i class='fa fa-times' aria-hidden='true'></i></button></td>"
                         "</tr>";

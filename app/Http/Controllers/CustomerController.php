@@ -14,7 +14,7 @@ class CustomerController extends Controller
     private $view     =  "customers.";
     private $action   =  "/dashboard/customers";
     private $db_key   =  "id";
-    private $perpage = 5;
+    private $perpage  =   7000;
     public function __construct()
     {
         $this->middleware('auth');
@@ -95,13 +95,13 @@ class CustomerController extends Controller
             $data["company_id"] = Auth::user()->company;
             $data["created_user"] = Auth::id();
             
-            $is_save             = Customer::where('cnic','=',
-                                                $data['cnic'])
-                                                ->count();
-            if($is_save > 0)    {
-                $response = array('flag'=>false,'msg'=>$this->singular.' with label cnic exist.');
-                echo json_encode($response); return;
-            }
+            // $is_save             = Customer::where('cnic','=',
+            //                                     $data['cnic'])
+            //                                     ->count();
+            // if($is_save > 0)    {
+            //     $response = array('flag'=>false,'msg'=>$this->singular.' with label cnic exist.');
+            //     echo json_encode($response); return;
+            // }
             $Areas         = new Customer;
             $Areas->insert($data);
             $response = array('flag'=>true,'msg'=>$this->singular.' is added sucessfully.','action'=>'reload');
@@ -122,17 +122,17 @@ class CustomerController extends Controller
             $data = $request->all();
             $this->cleanData($data);
 
-            if(isset($data['cnic'])) {
-                $is_save             = Customer::where('cnic','=',
-                                                    $data['cnic'])
-                                                    ->where($this->db_key,'!=',
-                                                    $id)
-                                                    ->count();
-                if($is_save > 0)    {
-                    $response = array('flag'=>false,'msg'=>$this->singular.' with cnic already exist.');
-                    echo json_encode($response); return;
-                }
-            }
+            // if(isset($data['cnic'])) {
+            //     $is_save             = Customer::where('cnic','=',
+            //                                         $data['cnic'])
+            //                                         ->where($this->db_key,'!=',
+            //                                         $id)
+            //                                         ->count();
+            //     if($is_save > 0)    {
+            //         $response = array('flag'=>false,'msg'=>$this->singular.' with cnic already exist.');
+            //         echo json_encode($response); return;
+            //     }
+            // }
             $obj         = Customer::find($id);
             $obj->update($data);
             $response = array('flag'=>true,'msg'=>$this->singular.' is updated sucessfully.','action'=>'reload');

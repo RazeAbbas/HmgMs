@@ -20,12 +20,12 @@
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <!-- <div class="col-md-12">
                     <div class="form-group">
                         <label for="label" class="control-label">CNIC</label>
                         <input type='text' name="cnic" id="label" class="form-control" required="" value="{{$row->cnic}}"/>
                     </div>
-                </div>
+                </div> -->
 
 
                 <div class="col-md-12">

@@ -10,7 +10,7 @@
         </button>
     </div>
     <form action="{{$action}}" method="post" data-action="make_ajax" data-action-after="reload">
-        
+        @csrf
         <div class="modal-body">
             <div class="row">
                 <div class="col-md-12">

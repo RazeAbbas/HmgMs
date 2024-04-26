@@ -30,7 +30,8 @@
                 <a href="{{asset('uploads/purchases/'.$val['purchase_receipt_image'])}}"><img src="{{asset('uploads/purchases/'.$val['purchase_receipt_image'])}}" height="150" width="150"/></a>
               </td>
               <td data-id="{{$val['id']}}" data-input="text" data-field="label">
-                <strong class="text-info">Name</strong> {{App\Models\Purchase::find($val['id'])->getSupplier->name}}<br>
+              <strong class="text-info">Name</strong> {{ optional(App\Models\Purchase::find($val['id'])->getSupplier)->name }}<br>
+
                 <strong class="text-info">Title</strong> {{$val['title']}}<br>
                 <strong class="text-info">Order Date</strong> {{$val['order_date']}}<br>
                 <strong class="text-info">Receive Date</strong> {{$val['receive_date']}}<br>

@@ -10,11 +10,55 @@
             <table class="table">
                 <thead class="text-uppercase">
                     <tr>
+                        <td colspan="3"><h6>Sales</h6></td>
+                    </tr>
+                    <tr class="text-white" style="background: #0984e3">
+                        <th scope="col">Date</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Sale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $total = 0; ?>
+                    @if($sale_wmp)
+                    @foreach($sale_wmp as $key=>$val)
+                    <?php 
+                    $total = $total + $val['total_bill']
+                    ?>
+                    <tr>
+                        <td data-id="{{$val['id']}}" data-input="text" data-field=  "label">{{$val['date']}}</td>
+                        <td data-id="{{$val['id']}}" data-input="text" data-field="label">
+                            {{$val->name}}
+                        </td>
+                        <td data-id="{{$val['id']}}" data-input="text" data-field="label">Rs. {{$val['total_bill']}}</td>
+                    </tr>
+                    @endforeach
+                    <tr>
+                        <td colspan="2"></td>
+                        <td><strong>Total</strong> {{$total}}</td>
+                    </tr>
+                    @else
+                    <tr>
+                        <td colspan="8" align="center">
+                            <h5 style="text-align: center;"><strong>No {{$module['singular']}} found !</strong></h5>
+                        </td>
+                    </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="single-table">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="text-uppercase">
+                    <tr>
                         <td colspan="3"><h6>Expense</h6></td>
                     </tr>
                     <tr class="text-white" style="background: #0984e3">
                         <th scope="col">Date</th>
-                        <th scope="col">Details</th>
+                        <th scope="col">Expense Name</th>
+                        <th scope="col">Expense Description</th>
                         <th scope="col">Expense</th>
                     </tr>
                 </thead>
@@ -28,9 +72,9 @@
                     <tr>
                         <td data-id="{{$val['id']}}" data-input="text" data-field="label">{{$val['date']}}</td>
                         <td data-id="{{$val['id']}}" data-input="text" data-field="label">
-                            <strong>Expense Type</strong> {{$val->getExpenseType->name}}<br>
-                            <strong>Description</strong> {{$val['description']}}<br>
+                             {{$val->getExpenseType->name}}
                         </td>
+                        <td>{{$val['description']}}</td>
                         <td data-id="{{$val['id']}}" data-input="text" data-field="label">Rs. {{$val['amount']}}</td>
                     </tr>
                     @endforeach
@@ -41,15 +85,14 @@
                     @else
                     <tr>
                         <td colspan="8" align="center">
-                            <h5 style="text-align: center;"><strong>No {{$module['singular']}} found !</strong>
-                            </td>
-                        </tr>
-                        @endif
-                    </tbody>
-                </table>
-            </div>
+                            <h5 style="text-align: center;"><strong>No {{$module['singular']}} found !</strong></h5>
+                        </td>
+                    </tr>
+                    @endif
+                </tbody>
+            </table>
         </div>
-        
+    </div>  
         <div class="single-table">
             <div class="table-responsive">
                 <table class="table">
@@ -65,7 +108,7 @@
                     </thead>
                     <tbody>
                         <?php $total_miscellaneous = 0; ?>
-                        @if($expense)
+                        @if($miscellaneous)
                         @foreach($miscellaneous as $key=>$val)
                         <?php 
                         $total_miscellaneous = $total_miscellaneous + $val['amount']
@@ -140,7 +183,7 @@
                     </div>
                 </div>
                 
-                <div class="single-table">
+                <!-- <div class="single-table">
                     <div class="table-responsive">
                         <table class="table">
                             <thead class="text-uppercase">
@@ -184,7 +227,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div> -->
                     
                     <div class="single-table">
                         <div class="table-responsive">

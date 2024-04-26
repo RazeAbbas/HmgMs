@@ -38,7 +38,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label for="label" class="control-label">Account</label>
-                        <input type='text' name="account" id="label" class="form-control" required="" value="{{$row->account}}"/>
+                        <input type='text' name="account" id="label" class="form-control" value="{{$row->account}}"/>
                     </div>
                 </div>
                 <div class="col-md-12">

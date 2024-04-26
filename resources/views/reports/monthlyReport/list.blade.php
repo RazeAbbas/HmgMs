@@ -40,7 +40,7 @@
                     <tr>
                         <td>{{$val['date']}}</td>
                         <td>
-                            <strong>Expense Type</strong> {{App\Models\Expense::find($val['id'])->getExpenseType->name}}<br>
+                            <strong>Expense</strong> {{App\Models\Expense::find($val['id'])->getExpenseType->name}}<br>
                             <strong>Description</strong> {{$val['description']}}<br>
                         </td>
                         <td>Rs. {{$val['amount']}}</td>
@@ -130,11 +130,11 @@
                             <tr>
                                 <td data-id="{{$val['id']}}" data-input="text" data-field="label">{{$val['ledger_date']}}</td>
                                 <td data-id="{{$val['id']}}" data-input="text" data-field="label">
-                                    <strong>Supplier Name</strong> {{$val['getSupplier']->name}}<br>
-                                    <strong>Phone No.</strong> {{$val['getSupplier']->phone}}<br>
-                                    <strong>Address</strong> {{$val['getSupplier']->address}}<br>
+                                    <strong>Supplier Name</strong> {{@$val['getSupplier']->name}}<br>
+                                    <strong>Phone No.</strong> {{@$val['getSupplier']->phone}}<br>
+                                    <strong>Address</strong> {{@$val['getSupplier']->address}}<br>
                                 </td>
-                                <td data-id="{{$val['id']}}" data-input="text" data-field="label">Rs. {{$val['paid_amount']}}</td>
+                                <td data-id="{{$val['id']}}" data-input="text" data-field="label">Rs. {{@$val['paid_amount']}}</td>
                             </tr>
                             @endforeach
                             <tr>
@@ -152,7 +152,7 @@
                         </table>
                     </div>
                 </div>
-                
+<!--                 
                 <div class="single-table">
                     <div class="table-responsive">
                         <table class="table">
@@ -198,7 +198,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div> -->
                     
                     <div class="single-table">
                         <div class="table-responsive">
@@ -217,16 +217,15 @@
                                     <?php $total_payment = 0; ?>
                                     @if($employee_payment)
                                     @foreach($employee_payment as $key=>$val)
-                                    {{-- {{dd($val['getEmployee']->toArray())}} --}}
-                                    <?php 
+                                    @php 
                                     $total_payment = $total_payment + $val['amount'];
-                                    ?>
+                                    @endphp
                                     <tr>
                                         <td>{{$val['date']}}</td>
                                         <td>
-                                            <strong>Employee Name</strong> {{$val['getEmployee']->first_name}} {{$val['getEmployee']->last_name}}<br>
-                                            <strong>Phone No.</strong> {{$val['getEmployee']->phone}}<br>
-                                            <strong>Address</strong> {{$val['getEmployee']->address}}<br>
+                                            <strong>Employee Name</strong> {{@$val['getEmployee']['first_name']}} {{@$val['getEmployee']['last_name']}}<br>
+                                            <strong>Phone No.</strong> {{@$val['getEmployee']['phone']}}<br>
+                                            <strong>Address</strong> {{@$val['getEmployee']['address']}}<br>
                                         </td>
                                         <td>Rs. {{$val['amount']}}</td>
                                     </tr>

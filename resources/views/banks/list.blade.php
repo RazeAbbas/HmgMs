@@ -1,10 +1,17 @@
 @extends('layouts.app')
 @section('content')
 <div class="col">
-  <h3 class="text-center p-3">{{$page_title}}</h3>
-  <div>
-  <a href="#data_modal" data-toggle="modal" data-url="{{url($module['action'].'/create')}}" data-action="data_modal" class="btn btn-danger btn-sm m-btn" style="margin-bottom: 20px; float: right;">+ Add Area</a>
-  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-6">
+          <h3 class="text-center p-3">{{$page_title}}</h3>
+        </div>
+        <div class="col-md-6">
+          <a href="#data_modal" data-toggle="modal" data-url="{{url($module['action'].'/create')}}" data-action="data_modal" class="btn btn-danger btn-sm m-btn" style="margin-bottom: 20px; float: right;">+ Add Bank</a>
+        </div>
+      </div>
+    </div>
   <div class="single-table">
     <div class="table-responsive">
       <table class="table">
@@ -53,6 +60,7 @@
       </table>
     </div>
   </div>
+</div>
 </div>
 
 @endsection

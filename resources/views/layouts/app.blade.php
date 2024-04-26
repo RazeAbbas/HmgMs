@@ -1,6 +1,5 @@
 <!doctype html>
 <html class="no-js" lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -20,7 +19,21 @@
     <link rel="stylesheet" href="{{asset('assets/css/styles.css')}}">
     <link rel="stylesheet" href="{{asset('assets/css/responsive.css')}}">
     <script src="{{asset('assets/js/vendor/modernizr-2.8.3.min.js')}}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" integrity="sha512-Mo79lrQ4UecW8OCcRUZzf0ntfMNgpOFR46Acj2ZtWO8vKhBvD79VCp3VOKSzk6TovLg5evL3Xi3u475Q/jMu4g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/js/all.min.js" integrity="sha512-YUwFoN1yaVzHxZ1cLsNYJzVt1opqtVLKgBQ+wDj+JyfvOkH66ck1fleCm8eyJG9O1HpKIf86HrgTXkWDyHy9HA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" integrity="sha512-YUwFoN1yaVzHxZ1cLsNYJzVt1opqtVLKgBQ+wDj+JyfvOkH66ck1fleCm8eyJG9O1HpKIf86HrgTXkWDyHy9HA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @yield('styles')
+    <style>
+        .modal-body {
+            max-height: 25rem;
+            overflow-y: auto;
+        }
+        .pos-body {
+            max-height: 25rem;
+            overflow-y: auto;
+        }
+    </style>
+   
 </head>
 
 <body class="body">
@@ -36,19 +49,19 @@
                 <div class="row align-items-center">
                     <div class="col-md-3">
                         <div class="logo">
-                            <a href="index.html"><img src="{{asset('assets/images/icon/logo2.png')}}" alt="logo"></a>
+                            <a href="{{url('/')}}"><img src="{{asset('assets/images/Hmg.png')}}" alt="logo"></a>
                         </div>
                     </div>
                     <div class="col-md-9 clearfix text-right">
                         <div class="d-md-inline-block d-block mr-md-4">
-                            <ul class="notification-area">
-                                <li id="full-view"><i class="ti-fullscreen"></i></li>
-                                <li id="full-view-exit"><i class="ti-zoom-out"></i></li>
+                            <ul class="notification-area mt-2">
+                                <li id="full-view"><i class="fa fa-arrows-alt" aria-hidden="true"></i></li>
+                                <li id="full-view-exit">Exit <i class="fa fa-arrows-alt" aria-hidden="true"></i></li>
                             </ul>
                         </div>
                         <div class="clearfix d-md-inline-block d-block">
-                            <div class="user-profile m-0">
-                                <img class="avatar user-thumb" src="{{asset('assets/images/author/avatar.png')}}" alt="avatar">
+                            <div class="user-profile m-0" style="background-color:#abcc80 !important; border-radius: 50px; padding: 8px;">
+                                <img class="avatar user-thumb" src="{{asset('assets/images/Hmg_profile.png')}}" alt="avatar">
                                 <h4 class="user-name dropdown-toggle" data-toggle="dropdown">{{@Auth::user()->first_name}}<i class="fa fa-angle-down"></i></h4>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{{url('dashboard/userAccounts/edit/'.Auth::id())}}">Settings</a>
@@ -77,7 +90,7 @@
                         <nav>
                             <ul id="nav_menu">
                                 <li>
-                                    <a href="{{ url('/dashboard') }}"><i class="ti-dashboard"></i><span>dashboard</span></a>
+                                    <a href="{{ url('/dashboard') }}"><i class="fa fa-dashboard" aria-hidden="true"></i><span>Dashboard</span></a>
                                     {{-- <ul class="submenu">
                                         <li><a href="index.html">ICO dashboard</a></li>
                                         <li><a href="index2.html">Ecommerce dashboard</a></li>
@@ -121,12 +134,13 @@
                                 @if (@Auth::user()->roles === 3)
                                 <li>
                                     <a href="javascript:void(0)">
-                                        <i class="fa fa-users"></i><span>Employees & Sub Dealers</span>
+                                        <i class="fa fa-users"></i><span>Empl. & Cust.</span>
                                     </a>
                                     <ul class="submenu">
                                         <li class="{{ $page_title == 'Employes List' ? 'active':''}}"><a href="{{url('dashboard/employes')}}">Employees</a></li>
-                                        <li class="{{ $page_title == 'Sub Dealers List' ? 'active show':''}}"><a href="{{url('dashboard/subDealers')}}">Sub Dealers</a></li>
+                                        <!-- <li class="{{ $page_title == 'Sub Dealers List' ? 'active show':''}}"><a href="{{url('dashboard/subDealers')}}">Sub Dealers</a></li> -->
                                         <li class="{{ $page_title == 'Customers List' ? 'active':''}}"><a href="{{url('dashboard/customers')}}">Customers</a></li>
+                                        <!-- <li class="{{ $page_title == 'Attendance List' ? 'active':''}}"><a href="{{url('dashboard/attendance')}}">Attendance</a></li> -->
                                     </ul>
                                 </li>
                                 
@@ -151,8 +165,9 @@
                                         <li class="{{ $page_title == 'Purchases List' ? 'active':''}}"><a href="{{url('dashboard/purchases')}}">Purchases</a></li>
                                         <li class="{{ $page_title == 'Stocks List' ? 'active':''}}"><a href="{{url('dashboard/allStock')}}">All Stock</a></li>
                                         <li class="{{ $page_title == 'Orders List' ? 'active':''}}"><a href="{{url('dashboard/orders')}}">Sales</a></li>
-                                        <li class="{{ $page_title == 'Storage Areas List' ? 'active':''}}"><a class="dropdown-item" href="{{url('dashboard/storageAreas')}}">Storage Area</a></li>
+                                        <!-- <li class="{{ $page_title == 'Storage Areas List' ? 'active':''}}"><a class="dropdown-item" href="{{url('dashboard/storageAreas')}}">Storage Area</a></li> -->
                                         <li class="{{ $page_title == 'Documents List' ? 'active':''}}"><a href="{{url('dashboard/documents')}}">Documents</a></li>
+                                        <li class="{{ $page_title == 'Package List' ? 'active':''}}"><a href="{{url('dashboard/packages')}}">Products/Packages</a></li>
                                     </ul>
                                 </li>
                                 
@@ -233,6 +248,26 @@
     );
 </script>
 @yield('scripts')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-1.12.3.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+<script>
+        $(document).ready(function() {
+            $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'print'
+                ]
+            });
+
+            $('#printButton').on('click', function() {
+                $('#myTable').DataTable().button('.buttons-print').trigger();
+            });
+        });
+    </script>
 </body>
 
 </html>

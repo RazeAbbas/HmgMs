@@ -11,4 +11,7 @@ class Sale extends Model
         "qty","price","total","total_bill",
         "discount","payable_amount"
     ];
+    public function employees(){
+        return $this->belongsTo('App\Models\Employe','employes','emp_id');
+    }
 }

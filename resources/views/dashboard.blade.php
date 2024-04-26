@@ -30,7 +30,7 @@
                 <div class="seo-fact sbg1">
                     <div class="p-4 d-flex justify-content-between align-items-center">
                         <div class="seofct-icon"><i class="fa fa-usd" aria-hidden="true"></i> Sales</div>
-                        <h2>{{$data['order_sale'] + $data['pos_sale']}}</h2>
+                        <h2>{{ $data['pos_sale']}}</h2>
                     </div>
                     <canvas id="" height="50"></canvas>
                 </div>
@@ -51,7 +51,7 @@
             <div class="card">
                 <div class="seo-fact sbg3">
                     <div class="p-4 d-flex justify-content-between align-items-center">
-                        <div class="seofct-icon"><i class="fa fa-th-list" aria-hidden="true"></i> Items</div>
+                        <div class="seofct-icon"><i class="fa fa-th-list" aria-hidden="true"></i> Packages</div>
                         <h2>{{$data['items']}}</h2>
                     </div>
                     <canvas id="" height="60"></canvas>

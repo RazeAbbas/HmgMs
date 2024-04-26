@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Stock;
 use App\Models\Customer;
 use App\Models\Sale;
+use App\Models\Employe;
 use App\Models\SaleDetail;
 use App\Models\Order;
+use App\Models\Package;
 
 class PosController extends Controller
 {
@@ -61,7 +63,7 @@ class PosController extends Controller
         /*
         GET RECORDS
         */
-        $records   = Stock::where('office_id','=',Auth::user()->office);
+        $records   = Package::where('office_id','=',Auth::user()->office);
         $records   = $this->search($records,$request,$data)->orderBy('id','DESC');
         /*
         GET TOTAL RECORD BEFORE BEFORE PAGINATE
@@ -79,12 +81,13 @@ class PosController extends Controller
         /*
         ASSIGN DATA FOR VIEW
         */
+        $data['employees'] = Employe::where('roles', '6')->where('office','=',Auth::user()->office)->get();
         $data['list']   =   $records;
         //dd($data);
         return view($this->view.'list',$data);
     }
     public function getStock($id){
-        $stock = Stock::find($id);
+        $stock = Package::find($id);
         return $stock;
     }
     public function getCustomer(Request $request)
@@ -97,7 +100,7 @@ class PosController extends Controller
     
     public function getItems(Request $request){
         $searchValue = $request->search;
-        $result = Stock::where('title', $searchValue)
+        $result = Package::where('title', $searchValue)
         ->orWhere('title', 'like', '%' . $searchValue . '%')->get();
         return $result;
         return $searchValue;
@@ -105,6 +108,7 @@ class PosController extends Controller
     
     public function saleProduct(Request $request){
         $data = $request->all();
+        // $data = $request->input('emp_id');
         $this->cleanData($data);
 
         $detail = new SaleDetail;
@@ -113,43 +117,36 @@ class PosController extends Controller
         $detail->total_bill = $data['total_bill'];
         $detail->discount = $data['discount'];
         $detail->payable_amount = $data['payable_amount'];
+        $detail->emp_id = $data['emp_id'];
         $detail->office_id = Auth::user()->office;
         $detail->company_id = Auth::user()->company;
         $detail->created_user = Auth::id();
         $detail->save();
         $detail_id = $detail->id;
+        $detail_emp_id = $detail->emp_id;
+        $packages = Package::whereIn('id', $data['item'])->get();
         
         for($i=0; $i<count($data['item']); $i++){
             $obj = new Sale;
             $obj->item = $data['item'][$i];
             $obj->qty = $data['qty'][$i];
-            $stock = Stock::find($data['item'][$i]);
+            $stock = Package::find($data['item'][$i]);
             $stock_qty = $stock->qty;
             $stock->qty = $stock_qty - $data['qty'][$i];
             $stock->save();
             $obj->price = $data['price'][$i];
             $obj->total = $data['total'][$i];
+            $data['item'][$i] = $packages->where('id', $data['item'][$i])->first()->title;
             $obj->sale_detail_id =  $detail_id;
+            $obj->emp_id =  $detail_emp_id;
             $obj->office_id = Auth::user()->office;
             $obj->company_id = Auth::user()->company;
             $obj->created_user = Auth::id();
             $obj->save();
         }
+        $data['emp'] = Employe::where('id', $obj->emp_id)->first();
         
         return view("pos/receipt",compact('data'));
-        
-        
-        
-        // foreach($data as $data) {
-            //     $invoice->products()->create($product);
-            // }
-            
-            // $obj = new Order;
-            // $obj->insert($data);
-            
-            
-            // $Areas = new Sale;
-            // $Areas->create($data);
         }
         
         public function cleanData(&$data) {
@@ -169,14 +166,6 @@ class PosController extends Controller
             if($request->input('label')){
                 $data = $request->all();
                 $this->cleanData($data);
-                
-                $is_save             = Categories::where('label','=',
-                $data['label'])
-                ->count();
-                if($is_save > 0)    {
-                    $response = array('flag'=>false,'msg'=>$this->singular.' with label already exist.');
-                    echo json_encode($response); return;
-                }
                 $Areas         = new Categories;
                 $Areas->insert($data);
                 $response = array('flag'=>true,'msg'=>$this->singular.' is added sucessfully.','action'=>'reload');

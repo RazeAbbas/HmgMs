@@ -15,7 +15,7 @@ class subDealerExporter implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return subDealer::select("name","cnic","phone","prefix","address")->where("office_id","=",Auth::user()->office)->get();
+        return \subDealer::select("name","cnic","phone","prefix","address")->where("office_id","=",Auth::user()->office)->get();
     }
     public function headings(): array
     {
